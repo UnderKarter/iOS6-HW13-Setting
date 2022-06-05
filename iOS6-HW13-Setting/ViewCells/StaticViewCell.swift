@@ -7,6 +7,13 @@
 
 import UIKit
 
+struct StaticOption {
+    let title: String
+    let icon: UIImage?
+    let iconBackgroundColor: UIColor
+    let handler: (()->Void)
+}
+
 class StaticViewCell: UITableViewCell {
     
     static let identifier = "StaticViewCell"
