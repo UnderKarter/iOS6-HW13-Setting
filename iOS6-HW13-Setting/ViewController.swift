@@ -8,7 +8,12 @@
 import UIKit
 
 struct Section {
-    let opitions: [StaticOption]
+    let opitions: [SettingOptionType]
+}
+
+enum SettingOptionType {
+    case staticCell (model: StaticOption)
+    case switchCell (model: SwitchOption)
 }
 
 
@@ -19,6 +24,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         table.register(
             StaticViewCell.self,
             forCellReuseIdentifier: StaticViewCell.identifier
+        )
+        table.register(
+            SwitchViewCell.self,
+            forCellReuseIdentifier: SwitchViewCell.identifier
         )
         
         return table
@@ -42,79 +51,110 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func configure() {
         models.append(Section(opitions: [
-            StaticOption(title: "Авиарежим",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemOrange){
-                             print("Нажата ячейка Авиарежим")
-            },
-            StaticOption(title: "Wi-Fi",
-                         icon: UIImage(systemName: "wifi"),
-                         iconBackgroundColor: UIColor.systemBlue){
-                             print("Нажата ячейка Wi-Fi")
-            },
-            StaticOption(title: "Bluetooth",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemBlue){
-                             print("Нажата ячейка Bluetooth")
-            },
-            StaticOption(title: "Сотовая связь",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemGreen){
-                             print("Нажата ячейка Сотовая связь")
-            },
-            StaticOption(title: "Режим модема",
-                         icon: UIImage(systemName: "personalhotspot"),
-                         iconBackgroundColor: UIColor.systemGreen){
-                             print("Нажата ячейка Режим модема")
-            },
-            StaticOption(title: "VPN",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemBlue){
-                             print("Нажата ячейка VPN")
-            }
+            .switchCell(model: SwitchOption(
+                title: "Авиарежим",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange,
+                handler: {
+                    print("Нажата ячейка Авиарежим")
+                },
+                isOn: false)),
+            .staticCell(model: StaticOption(
+                title: "Wi-Fi",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemBlue){
+                    print("Нажата ячейка Wi-Fi")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Bluetooth",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemBlue){
+                    print("Нажата ячейка Bluetooth")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Сотовая связь",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemGreen){
+                    print("Нажата ячейка Сотовая связь")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Режим модема",
+                icon: UIImage(systemName: "personalhotspot"),
+                iconBackgroundColor: UIColor.systemGreen){
+                    print("Нажата ячейка Режим модема")
+                }),
+            .switchCell(model: SwitchOption(
+                title: "VPN",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemBlue,
+                handler: {
+                    print("Нажата ячейка VPN")
+                },
+                isOn: false))
         ]))
         
         models.append(Section(opitions: [
-            StaticOption(title: "Уведомления",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemOrange){
-                             print("Нажата ячейка Уведомления")
-            },
-            StaticOption(title: "Звуки, тактильные сигналы",
-                         icon: UIImage(systemName: "wifi"),
-                         iconBackgroundColor: UIColor.systemRed){
-                             print("Нажата ячейка Звуки, тактильные сигналы")
-            },
-            StaticOption(title: "Фокусирование",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemPurple){
-                             print("Нажата ячейка Фокусирование")
-            },
-            StaticOption(title: "Экранное время",
-                         icon: UIImage(systemName: "airplane"),
-                         iconBackgroundColor: UIColor.systemPurple){
-                             print("Нажата ячейка Экранное время")
-            }
+            .staticCell(model: StaticOption(
+                title: "Уведомления",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange){
+                    print("Нажата ячейка Уведомления")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                })
         ]))
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = models[indexPath.section].opitions[indexPath.row]
         
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: StaticViewCell.identifier,
-            for: indexPath) as? StaticViewCell else {
-                return UITableViewCell()
-            }
-        cell.configure(with: model)
-        return cell
+        switch model.self {
+        case .staticCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: StaticViewCell.identifier,
+                for: indexPath) as? StaticViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        case .switchCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: SwitchViewCell.identifier,
+                for: indexPath) as? SwitchViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        }
     }
     
     // Вызов метода нажатием на ячеку
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let model = models[indexPath.section].opitions[indexPath.row]
-        model.handler()
+        let type = models[indexPath.section].opitions[indexPath.row]
+        
+        switch type.self {
+        case .staticCell(let model):
+            model.handler()
+        case .switchCell(let model):
+            model.handler()
+        }
         }
     
     // Кол-во секций
