@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C8583053284D56B800D9800F /* BoolViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8583052284D56B800D9800F /* BoolViewCell.swift */; };
+		C8583055284E472E00D9800F /* NotificationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8583054284E472E00D9800F /* NotificationViewCell.swift */; };
 		C8C25561284D3D3500C7E219 /* StaticViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C25560284D3D3500C7E219 /* StaticViewCell.swift */; };
 		C8C25564284D4B1900C7E219 /* SwitchViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C25563284D4B1900C7E219 /* SwitchViewCell.swift */; };
 		C8DE967D284D33AB00ACDB4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DE967C284D33AB00ACDB4D /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		C8583052284D56B800D9800F /* BoolViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolViewCell.swift; sourceTree = "<group>"; };
+		C8583054284E472E00D9800F /* NotificationViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewCell.swift; sourceTree = "<group>"; };
 		C8C25560284D3D3500C7E219 /* StaticViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticViewCell.swift; sourceTree = "<group>"; };
 		C8C25563284D4B1900C7E219 /* SwitchViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchViewCell.swift; sourceTree = "<group>"; };
 		C8DE9679284D33AB00ACDB4D /* iOS6-HW13-Setting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS6-HW13-Setting.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +51,7 @@
 				C8C25560284D3D3500C7E219 /* StaticViewCell.swift */,
 				C8C25563284D4B1900C7E219 /* SwitchViewCell.swift */,
 				C8583052284D56B800D9800F /* BoolViewCell.swift */,
+				C8583054284E472E00D9800F /* NotificationViewCell.swift */,
 			);
 			path = ViewCells;
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 			files = (
 				C8583053284D56B800D9800F /* BoolViewCell.swift in Sources */,
 				C8DE9681284D33AB00ACDB4D /* ViewController.swift in Sources */,
+				C8583055284E472E00D9800F /* NotificationViewCell.swift in Sources */,
 				C8DE967D284D33AB00ACDB4D /* AppDelegate.swift in Sources */,
 				C8C25564284D4B1900C7E219 /* SwitchViewCell.swift in Sources */,
 				C8C25561284D3D3500C7E219 /* StaticViewCell.swift in Sources */,
