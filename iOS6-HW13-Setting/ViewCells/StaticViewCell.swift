@@ -19,7 +19,7 @@ class StaticViewCell: UITableViewCell {
     static let identifier = "StaticViewCell"
     
     private let label: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.numberOfLines = 1
         return label
     }()

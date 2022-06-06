@@ -14,6 +14,7 @@ struct Section {
 enum SettingOptionType {
     case staticCell (model: StaticOption)
     case switchCell (model: SwitchOption)
+    case boolCell (model: BoolOption)
 }
 
 
@@ -29,12 +30,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             SwitchViewCell.self,
             forCellReuseIdentifier: SwitchViewCell.identifier
         )
+        table.register(
+            BoolViewCell.self,
+            forCellReuseIdentifier: BoolViewCell.identifier
+        )
         
         return table
     }()
     
     var models = [Section]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -58,31 +63,45 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 handler: {
                     print("Нажата ячейка Авиарежим")
                 },
-                isOn: false)),
-            .staticCell(model: StaticOption(
+                isOn: false
+            )),
+            
+            .boolCell(model: BoolOption(
                 title: "Wi-Fi",
                 icon: UIImage(systemName: "wifi"),
-                iconBackgroundColor: UIColor.systemBlue){
-                    print("Нажата ячейка Wi-Fi")
-                }),
-            .staticCell(model: StaticOption(
+                iconBackgroundColor: UIColor.systemBlue,
+                handler: {
+                print("Нажата ячейка Wi-Fi")
+                },
+                isOn: false,
+                label: "Не подкл."
+            )),
+            
+            .boolCell(model: BoolOption(
                 title: "Bluetooth",
                 icon: UIImage(systemName: "airplane"),
-                iconBackgroundColor: UIColor.systemBlue){
+                iconBackgroundColor: UIColor.systemBlue,
+                handler: {
                     print("Нажата ячейка Bluetooth")
-                }),
+                },
+                isOn: false,
+                label: "Выключен"
+            )),
+            
             .staticCell(model: StaticOption(
                 title: "Сотовая связь",
                 icon: UIImage(systemName: "airplane"),
                 iconBackgroundColor: UIColor.systemGreen){
                     print("Нажата ячейка Сотовая связь")
                 }),
+         
             .staticCell(model: StaticOption(
                 title: "Режим модема",
                 icon: UIImage(systemName: "personalhotspot"),
                 iconBackgroundColor: UIColor.systemGreen){
                     print("Нажата ячейка Режим модема")
                 }),
+
             .switchCell(model: SwitchOption(
                 title: "VPN",
                 icon: UIImage(systemName: "airplane"),
@@ -90,7 +109,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 handler: {
                     print("Нажата ячейка VPN")
                 },
-                isOn: false))
+                isOn: false
+            ))
         ]))
         
         models.append(Section(opitions: [
@@ -100,18 +120,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 iconBackgroundColor: UIColor.systemOrange){
                     print("Нажата ячейка Уведомления")
                 }),
+            
             .staticCell(model: StaticOption(
                 title: "Звуки, тактильные сигналы",
                 icon: UIImage(systemName: "wifi"),
                 iconBackgroundColor: UIColor.systemRed){
                     print("Нажата ячейка Звуки, тактильные сигналы")
                 }),
+            
             .staticCell(model: StaticOption(
                 title: "Фокусирование",
                 icon: UIImage(systemName: "airplane"),
                 iconBackgroundColor: UIColor.systemPurple){
                     print("Нажата ячейка Фокусирование")
                 }),
+            
             .staticCell(model: StaticOption(
                 title: "Экранное время",
                 icon: UIImage(systemName: "airplane"),
@@ -141,6 +164,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
             cell.configure(with: model)
             return cell
+        case .boolCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: BoolViewCell.identifier,
+                for: indexPath) as? BoolViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
         }
     }
     
@@ -154,8 +185,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             model.handler()
         case .switchCell(let model):
             model.handler()
+        case .boolCell(let model):
+            model.handler()
         }
-        }
+    }
     
     // Кол-во секций
     func numberOfSections(in tableView: UITableView) -> Int {
