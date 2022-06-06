@@ -15,6 +15,7 @@ enum SettingOptionType {
     case staticCell (model: StaticOption)
     case switchCell (model: SwitchOption)
     case boolCell (model: BoolOption)
+    case notificationCell (model: NotificationOption)
 }
 
 
@@ -34,11 +35,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             BoolViewCell.self,
             forCellReuseIdentifier: BoolViewCell.identifier
         )
+        table.register(NotificationViewCell.self, forCellReuseIdentifier: NotificationViewCell.identifier)
         
         return table
     }()
     
     var models = [Section]()
+    
+    let notic = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +58,77 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.frame = view.bounds
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let model = models[indexPath.section].opitions[indexPath.row]
+        
+        switch model.self {
+        case .staticCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: StaticViewCell.identifier,
+                for: indexPath) as? StaticViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        case .switchCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: SwitchViewCell.identifier,
+                for: indexPath) as? SwitchViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        case .boolCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: BoolViewCell.identifier,
+                for: indexPath) as? BoolViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        case .notificationCell(let model):
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: NotificationViewCell.identifier,
+                for: indexPath) as? NotificationViewCell else {
+                    return UITableViewCell()
+                }
+            cell.configure(with: model)
+            return cell
+        }
+    }
+    
+    // Вызов метода нажатием на ячеку
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let type = models[indexPath.section].opitions[indexPath.row]
+        
+        switch type.self {
+        case .staticCell(let model):
+            model.handler()
+        case .switchCell(let model):
+            model.handler()
+        case .boolCell(let model):
+            model.handler()
+        case .notificationCell(let model):
+            model.handler()
+        }
+    }
+    
+    // Кол-во секций
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return models.count
+    }
+    
+    // Кол-во строк в секции
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return models[section].opitions.count
+    }
+}
+
+extension ViewController {
+    //MARK: - Data of Sections
     func configure() {
+        //MARK: - Section #1
         models.append(Section(opitions: [
             .switchCell(model: SwitchOption(
                 title: "Авиарежим",
@@ -112,7 +186,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 isOn: false
             ))
         ]))
-        
+        //MARK: - Section #2
         models.append(Section(opitions: [
             .staticCell(model: StaticOption(
                 title: "Уведомления",
@@ -142,62 +216,165 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     print("Нажата ячейка Экранное время")
                 })
         ]))
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = models[indexPath.section].opitions[indexPath.row]
-        
-        switch model.self {
-        case .staticCell(let model):
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: StaticViewCell.identifier,
-                for: indexPath) as? StaticViewCell else {
-                    return UITableViewCell()
-                }
-            cell.configure(with: model)
-            return cell
-        case .switchCell(let model):
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: SwitchViewCell.identifier,
-                for: indexPath) as? SwitchViewCell else {
-                    return UITableViewCell()
-                }
-            cell.configure(with: model)
-            return cell
-        case .boolCell(let model):
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: BoolViewCell.identifier,
-                for: indexPath) as? BoolViewCell else {
-                    return UITableViewCell()
-                }
-            cell.configure(with: model)
-            return cell
-        }
-    }
-    
-    // Вызов метода нажатием на ячеку
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let type = models[indexPath.section].opitions[indexPath.row]
-        
-        switch type.self {
-        case .staticCell(let model):
-            model.handler()
-        case .switchCell(let model):
-            model.handler()
-        case .boolCell(let model):
-            model.handler()
-        }
-    }
-    
-    // Кол-во секций
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return models.count
-    }
-    
-    // Кол-во строк в секции
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return models[section].opitions.count
+        //MARK: - Section #3
+        models.append(Section(opitions: [
+            .notificationCell(model: NotificationOption(
+                title: "Основные",
+                icon: UIImage(systemName: "gear"),
+                iconBackgroundColor:  UIColor.systemGray,
+                handler: {
+                    print("Нажата ячейка Основные")
+                },
+                number: notic,
+                backgroundNotificaton: UIColor.systemRed
+            )),
+            
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Уведомления",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange){
+                    print("Нажата ячейка Уведомления")
+                }),
+                
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+                
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Уведомления",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange){
+                    print("Нажата ячейка Уведомления")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+                
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Уведомления",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange){
+                    print("Нажата ячейка Уведомления")
+                }),
+                    
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Уведомления",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemOrange){
+                    print("Нажата ячейка Уведомления")
+                }),
+                    
+            .staticCell(model: StaticOption(
+                title: "Звуки, тактильные сигналы",
+                icon: UIImage(systemName: "wifi"),
+                iconBackgroundColor: UIColor.systemRed){
+                    print("Нажата ячейка Звуки, тактильные сигналы")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Фокусирование",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Фокусирование")
+                }),
+            
+            .staticCell(model: StaticOption(
+                title: "Экранное время",
+                icon: UIImage(systemName: "airplane"),
+                iconBackgroundColor: UIColor.systemPurple){
+                    print("Нажата ячейка Экранное время")
+                })
+        ]))
     }
 }
-
