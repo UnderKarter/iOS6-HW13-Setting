@@ -45,7 +45,7 @@ class NotificationViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.textColor = .white
-        label.sizeToFit()
+        label.font = .boldSystemFont(ofSize: 18)
         return label
     }()
     
@@ -104,14 +104,14 @@ class NotificationViewCell: UITableViewCell {
         
         backgroundNotification.frame = CGRect(
             x: contentView.frame.width - 45,
-            y: 5,
+            y: 7,
             width: size,
             height: size
         )
         
         number.frame = CGRect(
             x: contentView.frame.width - 35,
-            y: 5,
+            y: 7,
             width: size,
             height: size
         )
